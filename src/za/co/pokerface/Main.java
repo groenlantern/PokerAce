@@ -103,6 +103,14 @@ public class Main {
 			shuffle();
 		}
 
+		if (userChat != null && (userChat.toLowerCase().contains("sort by rank".toLowerCase()))) {
+			sortByRank();
+		} else if (userChat != null && (userChat.toLowerCase().equals("sr".toLowerCase())
+				|| userChat.toLowerCase().contains("sort".toLowerCase()))) {
+			sort();
+		}
+
+
 		if (userChat != null && (userChat.toLowerCase().equals("d".toLowerCase())
 				|| userChat.toLowerCase().contains("draw".toLowerCase()))) {
 			drawCards();
@@ -207,6 +215,28 @@ public class Main {
 	}
 
 	/**
+	 * Standard deck sort the deck
+	 * 
+	 */
+	private static void sort() {
+		System.out.println("Sort ... Sort ... Sort ...  ");
+		System.out.println("");
+
+		newDeck = DeckOfCards.sort(newDeck);
+	}
+
+	/**
+	 * Deck sort the deck by rank only
+	 * 
+	 */
+	private static void sortByRank() {
+		System.out.println("Sort ... Sort ... Sort by Rank...  ");
+		System.out.println("");
+
+		newDeck = DeckOfCards.sortRankOnly(newDeck);
+	}
+
+	/**
 	 * 
 	 * @param selectedDeck
 	 * @param newDeck
@@ -244,7 +274,7 @@ public class Main {
 	private static void printMenu() {
 		System.out.println("What would you like to do today ?  ");
 		System.out.println(
-				"[S] - Shuffle Deck; [D] - Draw Cards; [E} - Evaluate Hand; [R] - Return Cards; [Q] - Exit/Quit; ");
+				"[S] - Shuffle Deck; [D] - Draw Cards; [E} - Evaluate Hand; [R] - Return Cards; [SR] - Sort Deck; [Q] - Exit/Quit; ");
 	}
 
 	/**
