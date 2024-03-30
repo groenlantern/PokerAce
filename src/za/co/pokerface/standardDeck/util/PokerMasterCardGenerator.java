@@ -14,7 +14,7 @@ import za.co.pokerface.baseCard.enums.SuitMapping;
 
 /**
  * 
- * Converter methods for usage of Poker Master library
+ * Converter methods for usage of Kata Poker Master library
  * 
  * @author Jean-Pierre Erasmus
  *
@@ -37,22 +37,46 @@ public abstract class PokerMasterCardGenerator {
 		ArrayList<Enum<?>> cardSuit = IMapperEnum.getExternalFromInternal( origCard.getCardSuite(), SuitMapping.CLUB_MAP );
 		ArrayList<Enum<?>> cardNumber = IMapperEnum.getExternalFromInternal( origCard.getCardRank(), CardValueMapping.ACE_MAP );
 
-		validateFirst(cardSuit, cardNumber);
+		validateFindFirstKata(cardSuit, cardNumber);
 		
 		return new kata.pokerhand.Card( (Figure)cardNumber.get(0), (Suit)cardSuit.get(0));
 	}
 
 	/**
+	 * This method aims to find the equiv. enums from kata matched to the poer ace internal enums. 
 	 * 
 	 * @param cardSuit
 	 * @param cardNumber
 	 */
-	private static void validateFirst(ArrayList<Enum<?>> cardSuit, ArrayList<Enum<?>> cardNumber) {
+	private static void validateFindFirstKata(ArrayList<Enum<?>> cardSuit, ArrayList<Enum<?>> cardNumber) {
 		assertTrue(!cardSuit.isEmpty());
 		assertTrue(!cardNumber.isEmpty());
-
-		assertTrue(cardSuit.get(0) instanceof Suit);
-		assertTrue(cardNumber.get(0) instanceof Figure);
+		
+		/**
+		 * Find the first suit mapping that is a Kata Suit
+		 * If elem 0 is not kata, remove and test next elem. 
+		 */
+		for (Enum<?> enmO : cardSuit) { 
+			try { 
+				assertTrue(cardSuit.get(0) instanceof Suit);
+				break;
+			} catch (Throwable thex) { 
+				cardSuit.remove(0);
+			}
+		}
+		//Same logic for card numbers as for suit - find first kata 
+		for (Enum<?> enmO : cardNumber) { 
+			try { 
+				assertTrue(cardNumber.get(0) instanceof Figure);
+				break;
+			} catch (Throwable thex) { 
+				cardNumber.remove(0);
+			}
+		}
+		
+		assertTrue(!cardSuit.isEmpty());
+		assertTrue(!cardNumber.isEmpty());
+		
 	}
 	
 	/**
