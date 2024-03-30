@@ -17,10 +17,31 @@ import za.co.pokerface.baseCard.enums.PokerType;
 import za.co.pokerface.standardDeck.util.DeckFactory;
 
 /**
+ * THe Poker Ace is a small a small application designed to be able to build a deck based on a predefined deck config
+ * The deck can be shuffled 
+ * A hand of cards can be drawn from the deck and evaluated to identify 
+ * the hand as 1 of 9 poker hands in order. 
+ * 
+ * THe design of the application is such that all aspects can be extended and or overwritten to facilitate
+ * custom decks and or rules. 
+ * 
+ * THe app uses a 3rd party library to identify the poker hands. Library used : 
+ * PokerHand Kata- This is the PokerHand kata (http://codingdojo.org/kata/PokerHands) implemented in Java by Arthur Latimier.
+ * 
+ * Pokerhand Ace The face of Poker
  * 
  * @author Jean-Pierre Erasmus
  * @email groenlantern@gmail.com
  *
+ * THis application is console based and runs as a small app taking in user input to select from a few options. 
+ * [S]huffle
+ * [D]raw
+ * [R]eplace
+ * [E]valuate
+ * [Q]uit/Exit
+ * 
+ * The input evaluator will also except the words in either upper or lowercase
+ * 
  */
 public class Main {
 
@@ -36,7 +57,7 @@ public class Main {
 	/**
 	 * Main method to run
 	 * 
-	 * Will until app is quit. 
+	 * Will run until app is quit. 
 	 * 
 	 * Input will except the letters [*] as well as the word in lowercase or uppercase
 	 * 
@@ -216,6 +237,9 @@ public class Main {
 
 	/**
 	 * Main menu 
+	 * 
+	 * add sort deck
+	 * 
 	 */
 	private static void printMenu() {
 		System.out.println("What would you like to do today ?  ");
