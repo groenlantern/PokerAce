@@ -16,7 +16,7 @@ import za.co.pokerface.baseCard.enums.SuitMapping;
  * 
  * Converter methods for usage of Poker Master library
  * 
- * @author F5156165
+ * @author Jean-Pierre Erasmus
  *
  */
 public abstract class PokerMasterCardGenerator {

@@ -6,7 +6,7 @@ import za.co.pokerface.baseCard.ICardInfo;
 
 /**
 	 * 
-	 * @author F5156165
+	 * @author Jean-Pierre Erasmus
 	 *
 	 */
 public class SortbyRank implements Comparator<Card> {

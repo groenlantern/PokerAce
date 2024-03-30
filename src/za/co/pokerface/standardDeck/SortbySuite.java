@@ -5,7 +5,7 @@ import za.co.pokerface.baseCard.Card;
 
 /**
  * 
- * @author F5156165
+ * @author Jean-Pierre Erasmus
  *
  */
 public class SortbySuite implements Comparator<Card> {

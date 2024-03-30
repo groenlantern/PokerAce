@@ -14,7 +14,7 @@ import za.co.pokerface.baseCard.enums.Suites;
 
 /**
  * Defines and builds a standard deck of 52 cards - no jokers
- * @author F5156165
+ * @author Jean-Pierre Erasmus
  *
  */
 public class StandardDeck extends DeckOfCards {
