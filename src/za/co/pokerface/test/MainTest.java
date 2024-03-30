@@ -18,16 +18,23 @@ import kata.pokerhand.bean.Suit;
 import za.co.pokerface.baseCard.Card;
 import za.co.pokerface.baseCard.DeckOfCards;
 import za.co.pokerface.baseCard.enums.DeckTypes;
+import za.co.pokerface.baseCard.enums.EvaluatorLibrary;
 import za.co.pokerface.baseCard.enums.PokerHandMapping;
 import za.co.pokerface.baseCard.enums.PokerType;
 import za.co.pokerface.standardDeck.util.DeckFactory;
-import za.co.pokerface.standardDeck.util.PokerMasterCardGenerator;
+import za.co.pokerface.standardDeck.util.ThirdPartyConvertor;
 
 /**
+ * Unit tests related to the shuffeling drawing anf evaluating of cards and hands and decks
+ * 
  * @author Jean-Pierre Erasmus
  *
  */
 public class MainTest {
+	
+	/**
+	 * Config data for text
+	 */
 	static final PokerType gameType = PokerType.STANDARDPOKER;
 	static DeckTypes selectedDeck = null;
 	static ArrayList<Card> newDeck = null;
@@ -35,7 +42,8 @@ public class MainTest {
 	// 3rd Party evaluator storage
 	static Hand kataHand = null;
 	static PokerHandMapping handValue = PokerHandMapping.NONE;
-
+	static EvaluatorLibrary handEvaluator = EvaluatorLibrary.KATA;
+	
 	/**
 	 * Setup test data
 	 */
@@ -117,48 +125,64 @@ public class MainTest {
 	 */
 	@Test
 	public void testEvalue() throws Exception {
-		getStraightFlush();
+		testStraightFlush();
 
 		assert (handValue.equals(PokerHandMapping.STRAIGHT_FLUSH));
 
-		getStraight();
+		testStraight();
 
 		assert (handValue.equals(PokerHandMapping.STRAIGHT));
 
-		getThreeKind();
+		testThreeKind();
 
 		assert (handValue.equals(PokerHandMapping.THREE_OF_A_KIND));
 
-		getHigh();
+		testFullHouseKind();
+
+		assert (handValue.equals(PokerHandMapping.FULL_HOUSE));
+
+		testFourKind();
+		
+		assert (handValue.equals(PokerHandMapping.FOUR_OF_A_KIND));
+
+		testHigh();
 
 		assert (handValue.equals(PokerHandMapping.HIGH_CARD));
 
-		getPair();
+		testPair();
 
 		assert (handValue.equals(PokerHandMapping.PAIR));
 
+		testTwoPair();
+
+		assert (handValue.equals(PokerHandMapping.TWO_PAIRS));
+
+		testFlush();
+
+		assert (handValue.equals(PokerHandMapping.FLUSH));
+
 	}
 
 	/**
 	 * 
 	 * @throws Exception
 	 */
-	private void getStraightFlush() throws Exception {
+	private void testStraightFlush() throws Exception {
 		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
 
-		kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.CLUB);
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.TEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.NINE, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.NINE, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.EIGHT, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.SEVEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.SEVEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
 		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
@@ -173,22 +197,53 @@ public class MainTest {
 	 * 
 	 * @throws Exception
 	 */
-	private void getStraight() throws Exception {
+	private void testFlush() throws Exception {
 		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
 
-		kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.CLUB);
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TWO, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.TEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.NINE, Suit.HEART);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.FOUR, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.EIGHT, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.SEVEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.ACE, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
+		kataHandList.toArray(kataHandArray);
+
+		kataHand = new Hand(kataHandArray);
+
+		handValue = PokerHandMapping.getHandValue(kataHand);
+	}
+
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	private void testStraight() throws Exception {
+		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
+
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.NINE, Suit.HEART);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.SEVEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
 		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
@@ -203,22 +258,22 @@ public class MainTest {
 	 * 
 	 * @throws Exception
 	 */
-	private void getThreeKind() throws Exception {
+	private void testThreeKind() throws Exception {
 		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
 
-		kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.CLUB);
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.TEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.HEART);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.HEART);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.EIGHT, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.DIAMOND);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.DIAMOND);
 		kataHandList.add(kataCard);
 
 		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
@@ -233,22 +288,84 @@ public class MainTest {
 	 * 
 	 * @throws Exception
 	 */
-	private void getPair() throws Exception {
+	private void testFullHouseKind() throws Exception {
 		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
 
-		kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.CLUB);
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.TEN, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.HEART);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.HEART);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.EIGHT, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.SPADE);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.QUEEN, Suit.DIAMOND);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.DIAMOND);
+		kataHandList.add(kataCard);
+
+		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
+		kataHandList.toArray(kataHandArray);
+
+		kataHand = new Hand(kataHandArray);
+
+		handValue = PokerHandMapping.getHandValue(kataHand);
+	}
+
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	private void testFourKind() throws Exception {
+		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
+
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.HEART);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.SPADE);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.DIAMOND);
+		kataHandList.add(kataCard);
+
+		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
+		kataHandList.toArray(kataHandArray);
+
+		kataHand = new Hand(kataHandArray);
+
+		handValue = PokerHandMapping.getHandValue(kataHand);
+	}
+
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	private void testPair() throws Exception {
+		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
+
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.HEART);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.QUEEN, Suit.DIAMOND);
 		kataHandList.add(kataCard);
 
 		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
@@ -263,22 +380,52 @@ public class MainTest {
 	 * 
 	 * @throws Exception
 	 */
-	private void getHigh() throws Exception {
+	private void testTwoPair() throws Exception {
 		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
 
-		kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard(Figure.JACK, Suit.CLUB);
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.TWO, Suit.CLUB);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TEN, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.KING, Suit.HEART);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.HEART);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.EIGHT, Suit.DIAMOND);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.CLUB);
 		kataHandList.add(kataCard);
 
-		kataCard = PokerMasterCardGenerator.buildCard(Figure.FIVE, Suit.SPADE);
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.DIAMOND);
+		kataHandList.add(kataCard);
+
+		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];
+		kataHandList.toArray(kataHandArray);
+
+		kataHand = new Hand(kataHandArray);
+
+		handValue = PokerHandMapping.getHandValue(kataHand);
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	private void testHigh() throws Exception {
+		List<kata.pokerhand.Card> kataHandList = new ArrayList<>();
+
+		kata.pokerhand.Card kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.JACK, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.TWO, Suit.CLUB);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.KING, Suit.HEART);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.EIGHT, Suit.DIAMOND);
+		kataHandList.add(kataCard);
+
+		kataCard = (kata.pokerhand.Card) ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).buildCard(Figure.FIVE, Suit.SPADE);
 		kataHandList.add(kataCard);
 
 		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[kataHandList.size()];

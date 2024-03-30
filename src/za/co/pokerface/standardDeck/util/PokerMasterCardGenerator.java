@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import kata.pokerhand.Hand;
 import kata.pokerhand.bean.Figure;
 import kata.pokerhand.bean.Suit;
 import za.co.pokerface.baseCard.Card;
@@ -19,7 +20,7 @@ import za.co.pokerface.baseCard.enums.SuitMapping;
  * @author Jean-Pierre Erasmus
  *
  */
-public abstract class PokerMasterCardGenerator {
+public class PokerMasterCardGenerator implements ThirdPartyConvertor {
 
 	/**
 	 * 
@@ -31,24 +32,26 @@ public abstract class PokerMasterCardGenerator {
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	public static kata.pokerhand.Card buildCard(za.co.pokerface.baseCard.Card origCard) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
+	@Override
+	public  Object buildCard(za.co.pokerface.baseCard.Card origCard) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
 		assertTrue(origCard.getCardRank() instanceof Enum);
 		
 		ArrayList<Enum<?>> cardSuit = IMapperEnum.getExternalFromInternal( origCard.getCardSuite(), SuitMapping.CLUB_MAP );
 		ArrayList<Enum<?>> cardNumber = IMapperEnum.getExternalFromInternal( origCard.getCardRank(), CardValueMapping.ACE_MAP );
 
-		validateFindFirstKata(cardSuit, cardNumber);
+		validateFindFirst(cardSuit, cardNumber);
 		
 		return new kata.pokerhand.Card( (Figure)cardNumber.get(0), (Suit)cardSuit.get(0));
 	}
 
 	/**
-	 * This method aims to find the equiv. enums from kata matched to the poer ace internal enums. 
+	 * This method aims to find the equiv. enums from kata matched to the poker ace internal enums. 
 	 * 
 	 * @param cardSuit
 	 * @param cardNumber
 	 */
-	private static void validateFindFirstKata(ArrayList<Enum<?>> cardSuit, ArrayList<Enum<?>> cardNumber) {
+	@Override
+	public void validateFindFirst(ArrayList<Enum<?>> cardSuit, ArrayList<Enum<?>> cardNumber) {
 		assertTrue(!cardSuit.isEmpty());
 		assertTrue(!cardNumber.isEmpty());
 		
@@ -85,7 +88,8 @@ public abstract class PokerMasterCardGenerator {
 	 * @param suit
 	 * @return
 	 */
-	public static kata.pokerhand.Card buildCard(Object number, Object suit)  {
+	@Override
+	public  Object buildCard(Object number, Object suit)  {
 		assertTrue(number != null);
 		assertTrue(suit != null);
 				
@@ -98,7 +102,7 @@ public abstract class PokerMasterCardGenerator {
 	 * @param suit
 	 * @return
 	 */
-	public static kata.pokerhand.Card buildCard(Figure number, Suit suit)  {
+	public static Object buildCard(Figure number, Suit suit)  {
 		assertTrue(number != null);
 		assertTrue(suit != null);
 				
@@ -107,27 +111,31 @@ public abstract class PokerMasterCardGenerator {
 	
 	/**
 	 * 
-	 * @param origHand
-	 * @return
-	 * @throws Exception 
-	 * @throws NoSuchMethodException 
-	 * @throws InvocationTargetException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @param hand
+	 * @return 3rd Party Hand Object 
+	 * 
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws Exception
 	 */
-	public static kata.pokerhand.Card[] getKataHand(ArrayList<za.co.pokerface.baseCard.Card> origHand) 
-			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception { 
-		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[ origHand.size() ];
+	@Override
+	public Object loadHand(ArrayList<Card> hand)
+			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
+
+		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[  hand.size() ];
+
 		int x = 0;
 		
-		for (Card cardObj : origHand) { 
-			kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard( cardObj );
+		for (Card cardObj : hand) { 
+			kata.pokerhand.Card kataCard = (kata.pokerhand.Card) buildCard( cardObj );
 			kataHandArray[x++] = kataCard;
 		}
+
+		return new Hand( kataHandArray );					
 		
-		return kataHandArray;
-	
 	}
-	
+
 	
 }

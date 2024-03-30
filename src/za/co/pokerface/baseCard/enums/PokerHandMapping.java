@@ -1,20 +1,18 @@
 package za.co.pokerface.baseCard.enums;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import kata.pokerhand.Hand;
 import kata.pokerhand.bean.Combination;
-import za.co.pokerface.baseCard.Card;
 import za.co.pokerface.baseCard.ICardInfo;
 import za.co.pokerface.baseCard.IComboHand;
 import za.co.pokerface.standardDeck.exceptions.NoHandFoundException;
-import za.co.pokerface.standardDeck.util.PokerMasterCardGenerator;
 
 /**
- * Map Internal Standard poker hand to Kata Poker hand, exposes evaluator methods from kata for each hand. 
+ * Map Internal Standard poker hand to 3rd party Poker hand, exposes evaluator methods from 3rd for each hand. 
+ * 
+ * 
+ * To hook in another library, add enum values to represent the hand you need with the appropriate internal and external mappings. 
  * 
  * @author Jean-Pierre Erasmus
  *
@@ -130,6 +128,11 @@ public enum PokerHandMapping implements IMapperEnum {
 		this.referenceExternal = extReference;
 	}
 
+	/**
+	 * 
+	 * @param hand
+	 * @return
+	 */
 	private static boolean validateHandObject(Object... hand) {
 		if (hand == null) return false;
 		if (hand.length < 1) return false;
@@ -139,6 +142,9 @@ public enum PokerHandMapping implements IMapperEnum {
 		return true;
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public Enum<? extends ICardInfo> getReferenceInternal() {
 		return referenceInternal;
@@ -161,6 +167,9 @@ public enum PokerHandMapping implements IMapperEnum {
 		throw new NoHandFoundException("Invalid Internal Reference Enum");
 	}
 
+	/**
+	 * Return the exception linked to this enum(Interface)
+	 */
 	@Override
 	public Exception getException() {
 		return new NoHandFoundException("");
@@ -168,38 +177,16 @@ public enum PokerHandMapping implements IMapperEnum {
  
 	
 	/**
+	 * This method does some special magic, it relies on the external library identification
+	 * mapped to the internal identification sorted by the assigned rank to bring back the highest 
+	 * rank hand evaluation based on the enum rules.
 	 * 
-	 * @param hand
-	 * @param kataHand
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
-	 * @throws Exception
-	 */
-	public static Hand loadKataHand(ArrayList<Card> hand)
-			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
-
-		kata.pokerhand.Card[] kataHandArray = new kata.pokerhand.Card[  hand.size() ];
-
-		int x = 0;
-		
-		for (Card cardObj : hand) { 
-			kata.pokerhand.Card kataCard = PokerMasterCardGenerator.buildCard( cardObj );
-			kataHandArray[x++] = kataCard;
-		}
-
-		return new Hand( kataHandArray );					
-		
-	}
-
-	/**
-	 * 
-	 * @param kataHand
+ 	 * 
+	 * @param trdPrtyHand
 	 * @return
 	 * @throws Exception
 	 */
-	public static PokerHandMapping getHandValue(Hand kataHand) throws Exception {
+	public static PokerHandMapping getHandValue(Object trdPrtyHand) throws Exception {
 		PokerHandMapping handValue = null;
 		
 		//Use a treemap as it is sorted by key
@@ -216,7 +203,7 @@ public enum PokerHandMapping implements IMapperEnum {
 		        		(Enum<? extends ICardInfo>) handsMap.get(key) );
 		        
 		        //First mapped value is hand value
-		        if (handMapper.isMapped(kataHand)) { 
+		        if (handMapper.isMapped(trdPrtyHand)) { 
 		        	handValue = handMapper;
 		        	break;
 		        }

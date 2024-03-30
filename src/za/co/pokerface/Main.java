@@ -6,15 +6,16 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import kata.pokerhand.Hand;
 import za.co.pokerface.baseCard.Card;
 import za.co.pokerface.baseCard.DeckOfCards;
 import za.co.pokerface.baseCard.ICardInfo;
 import za.co.pokerface.baseCard.IComboHand;
 import za.co.pokerface.baseCard.enums.DeckTypes;
+import za.co.pokerface.baseCard.enums.EvaluatorLibrary;
 import za.co.pokerface.baseCard.enums.PokerHandMapping;
 import za.co.pokerface.baseCard.enums.PokerType;
 import za.co.pokerface.standardDeck.util.DeckFactory;
+import za.co.pokerface.standardDeck.util.ThirdPartyConvertor;
 
 /**
  * THe Poker Ace is a small a small application designed to be able to build a deck based on a predefined deck config
@@ -51,9 +52,10 @@ public class Main {
 	static ArrayList<Card> newDeck = null;
 	static ArrayList<Card> hand = new ArrayList<>();
 	// 3rd Party evaluator storage
-	static Hand kataHand = null;
+	static Object rdPrtyHand = null;
 	static PokerHandMapping handValue = PokerHandMapping.NONE;
-
+	static EvaluatorLibrary handEvaluator = EvaluatorLibrary.KATA;
+	
 	/**
 	 * Main method to run
 	 * 
@@ -110,12 +112,12 @@ public class Main {
 			sort();
 		}
 
-
 		if (userChat != null && (userChat.toLowerCase().equals("d".toLowerCase())
 				|| userChat.toLowerCase().contains("draw".toLowerCase()))) {
 			drawCards();
 
 		}
+		
 		if (userChat != null && (userChat.toLowerCase().equals("e".toLowerCase())
 				|| userChat.toLowerCase().contains("evaluate".toLowerCase()))) {
 			evalHand();
@@ -151,7 +153,7 @@ public class Main {
 		System.out.println("Returning cards to deck...");
 
 		DeckOfCards.returnCards(newDeck, hand);
-		kataHand = null;
+		rdPrtyHand = null;
 	}
 
 	/**
@@ -163,15 +165,26 @@ public class Main {
 		System.out
 				.println("Evaluating hand by value for " + gameType.getDeckType().getDeckDefinition().getDescription());
 
-		if (hand == null || kataHand == null) {
+		if (hand == null || rdPrtyHand == null) {
 			System.out.println("Your hand is Empty");
 		} else {
-
-			handValue = PokerHandMapping.getHandValue(kataHand);
-
-			System.out.println("Your hand value is a " + ((IComboHand) handValue.getReferenceInternal()).getLabel());
-
+			
+			handValue = PokerHandMapping.getHandValue(rdPrtyHand);
+			String handLabel = ((IComboHand) handValue.getReferenceInternal()).getLabel();
+			
+			/**
+			 * Print the Users hand identity as evaluated by the chosen library 
+			 */
+			printPokerHandName(handLabel);
 		}
+	}
+
+	/**
+	 * Print the poker hand description/label
+	 * @param cardHandDescription
+	 */
+	private static void printPokerHandName(String cardHandDescription) {
+		System.out.println("Your hand value is a " + cardHandDescription);
 	}
 
 	/**
@@ -189,8 +202,9 @@ public class Main {
 		System.out.println("");
 
 		DeckOfCards.drawCards(newDeck, gameType.getDrawSize(), hand);
-		kataHand = PokerHandMapping.loadKataHand(hand);
-
+		
+		rdPrtyHand = ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).loadHand(hand);
+		
 		// Print the current hand of cards
 		System.out.print("Your hand: ");
 
@@ -203,6 +217,7 @@ public class Main {
 		System.out.println("");
 	}
 
+	
 	/**
 	 * Shuffle the deck
 	 * 

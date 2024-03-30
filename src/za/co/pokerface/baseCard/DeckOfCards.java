@@ -7,8 +7,21 @@ import za.co.pokerface.baseCard.enums.DeckTypes;
 import za.co.pokerface.standardDeck.SortbyRank;
 import za.co.pokerface.standardDeck.SortbySuiteAndRank;
 
+/**
+ * Base for a deck of cards definition
+ * 
+ * @author Jean-Pierre Erasmus
+ * groenlantern@gmail.com
+ *
+ */
 public abstract class DeckOfCards {
 		 
+	/**
+	 * PIP - Number cards
+	 * Extra - Jokers etc. when applicable
+	 * 
+	 */
+	
 	HashSet<Card> pipCards;
 	HashSet<Card> faceCards;
 	HashSet<Card> extraCards;
