@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import za.co.pokerface.baseCard.Card;
 import za.co.pokerface.baseCard.DeckOfCards;
@@ -14,54 +15,57 @@ import za.co.pokerface.baseCard.enums.DeckTypes;
 import za.co.pokerface.baseCard.enums.EvaluatorLibrary;
 import za.co.pokerface.baseCard.enums.PokerHandMapping;
 import za.co.pokerface.baseCard.enums.PokerType;
+import za.co.pokerface.standardDeck.exceptions.NoDeckFoundException;
+import za.co.pokerface.standardDeck.exceptions.NoHandFoundException;
 import za.co.pokerface.standardDeck.util.DeckFactory;
 import za.co.pokerface.standardDeck.util.ThirdPartyConvertor;
 
 /**
- * THe Poker Ace is a small a small application designed to be able to build a deck based on a predefined deck config
- * The deck can be shuffled 
- * A hand of cards can be drawn from the deck and evaluated to identify 
- * the hand as 1 of 9 poker hands in order. 
+ * THe Poker Ace is a small a small application designed to be able to build a
+ * deck based on a predefined deck config The deck can be shuffled A hand of
+ * cards can be drawn from the deck and evaluated to identify the hand as 1 of 9
+ * poker hands in order.
  * 
- * THe design of the application is such that all aspects can be extended and or overwritten to facilitate
- * custom decks and or rules. 
+ * THe design of the application is such that all aspects can be extended and or
+ * overwritten to facilitate custom decks and or rules.
  * 
- * THe app uses a 3rd party library to identify the poker hands. Library used : 
- * PokerHand Kata- This is the PokerHand kata (http://codingdojo.org/kata/PokerHands) implemented in Java by Arthur Latimier.
+ * THe app uses a 3rd party library to identify the poker hands. Library used :
+ * PokerHand Kata- This is the PokerHand kata
+ * (http://codingdojo.org/kata/PokerHands) implemented in Java by Arthur
+ * Latimier.
  * 
  * Pokerhand Ace The face of Poker
  * 
  * @author Jean-Pierre Erasmus
  * @email groenlantern@gmail.com
  *
- * THis application is console based and runs as a small app taking in user input to select from a few options. 
- * [S]huffle
- * [D]raw
- * [R]eplace
- * [E]valuate
- * [Q]uit/Exit
+ *        THis application is console based and runs as a small app taking in
+ *        user input to select from a few options. [S]huffle [D]raw [R]eplace
+ *        [E]valuate [Q]uit/Exit
  * 
- * The input evaluator will also except the words in either upper or lowercase
+ *        The input evaluator will also except the words in either upper or
+ *        lowercase
  * 
  */
 public class Main {
 
-	//Variables
+	// Variables
 	static final PokerType gameType = PokerType.STANDARDPOKER;
 	static DeckTypes selectedDeck = null;
-	static ArrayList<Card> newDeck = null;
-	static ArrayList<Card> hand = new ArrayList<>();
+	static Optional<ArrayList<Card>> newDeck = null;
+	static Optional<ArrayList<Card>> hand = null;
 	// 3rd Party evaluator storage
 	static Object rdPrtyHand = null;
 	static PokerHandMapping handValue = PokerHandMapping.NONE;
 	static EvaluatorLibrary handEvaluator = EvaluatorLibrary.KATA;
-	
+
 	/**
 	 * Main method to run
 	 * 
-	 * Will run until app is quit. 
+	 * Will run until app is quit.
 	 * 
-	 * Input will except the letters [*] as well as the word in lowercase or uppercase
+	 * Input will except the letters [*] as well as the word in lowercase or
+	 * uppercase
 	 * 
 	 * @param args
 	 * @throws Exception
@@ -75,9 +79,13 @@ public class Main {
 
 		// create deck of cards
 		selectedDeck = gameType.getDeckType();
-		newDeck = DeckFactory.getNewDeck(selectedDeck);
+		newDeck = Optional.of(DeckFactory.getNewDeck(selectedDeck));
+		hand = Optional.of(new ArrayList<>());
 
-		printWelcome(selectedDeck, newDeck);
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+
+		printWelcome(selectedDeck, newDeck.get());
 
 		// Process user input
 		while (true) {
@@ -117,7 +125,7 @@ public class Main {
 			drawCards();
 
 		}
-		
+
 		if (userChat != null && (userChat.toLowerCase().equals("e".toLowerCase())
 				|| userChat.toLowerCase().contains("evaluate".toLowerCase()))) {
 			evalHand();
@@ -140,7 +148,7 @@ public class Main {
 	}
 
 	/**
-	 * Return cards to deck 
+	 * Return cards to deck
 	 * 
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -152,7 +160,12 @@ public class Main {
 			NoSuchMethodException, Exception {
 		System.out.println("Returning cards to deck...");
 
-		DeckOfCards.returnCards(newDeck, hand);
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+		if (hand.isEmpty())
+			throw new NoHandFoundException("Exception: Empty Hand");
+
+		DeckOfCards.returnCards(newDeck.get(), hand.get());
 		rdPrtyHand = null;
 	}
 
@@ -168,12 +181,12 @@ public class Main {
 		if (hand == null || rdPrtyHand == null) {
 			System.out.println("Your hand is Empty");
 		} else {
-			
+
 			handValue = PokerHandMapping.getHandValue(rdPrtyHand);
 			String handLabel = ((IComboHand) handValue.getReferenceInternal()).getLabel();
-			
+
 			/**
-			 * Print the Users hand identity as evaluated by the chosen library 
+			 * Print the Users hand identity as evaluated by the chosen library
 			 */
 			printPokerHandName(handLabel);
 		}
@@ -181,6 +194,7 @@ public class Main {
 
 	/**
 	 * Print the poker hand description/label
+	 * 
 	 * @param cardHandDescription
 	 */
 	private static void printPokerHandName(String cardHandDescription) {
@@ -201,14 +215,22 @@ public class Main {
 		System.out.println("Drawing " + gameType.getDrawSize() + " cards from the top");
 		System.out.println("");
 
-		DeckOfCards.drawCards(newDeck, gameType.getDrawSize(), hand);
-		
-		rdPrtyHand = ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).loadHand(hand);
-		
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+		if (hand.isEmpty())
+			throw new NoHandFoundException("Exception: Empty Hand");
+
+		DeckOfCards.drawCards(newDeck.get(), gameType.getDrawSize(), hand.get());
+
+		if (hand.isEmpty())
+			throw new NoHandFoundException("Exception: Empty Hand");
+
+		rdPrtyHand = ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).loadHand(hand.get());
+
 		// Print the current hand of cards
 		System.out.print("Your hand: ");
 
-		for (Card cardObj : hand) {
+		for (Card cardObj : hand.get()) {
 			System.out
 					.print(" " + ((ICardInfo) cardObj.getCardRank()).getSymbol() + cardObj.getCardSuite().getSymbol());
 		}
@@ -217,38 +239,52 @@ public class Main {
 		System.out.println("");
 	}
 
-	
 	/**
 	 * Shuffle the deck
 	 * 
+	 * @throws NoDeckFoundException
+	 * 
 	 */
-	private static void shuffle() {
+	private static void shuffle() throws NoDeckFoundException {
 		System.out.println("Shuffeling ... Shuffeling ... Shuffeling ...  ");
 		System.out.println("");
 
-		selectedDeck.getDeckDefinition().shuffle(newDeck);
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+
+		selectedDeck.getDeckDefinition().shuffle(newDeck.get());
 	}
 
 	/**
 	 * Standard deck sort the deck
 	 * 
+	 * @throws NoDeckFoundException
+	 * 
 	 */
-	private static void sort() {
+	private static void sort() throws NoDeckFoundException {
 		System.out.println("Sort ... Sort ... Sort ...  ");
 		System.out.println("");
 
-		newDeck = DeckOfCards.sort(newDeck);
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+
+		newDeck = Optional.of(DeckOfCards.sort(newDeck.get()));
 	}
 
 	/**
 	 * Deck sort the deck by rank only
 	 * 
+	 * @throws NoDeckFoundException
+	 * 
 	 */
-	private static void sortByRank() {
+	private static void sortByRank() throws NoDeckFoundException {
 		System.out.println("Sort ... Sort ... Sort by Rank...  ");
 		System.out.println("");
 
-		newDeck = DeckOfCards.sortRankOnly(newDeck);
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+
+		newDeck = Optional.of(DeckOfCards.sortRankOnly(newDeck.get()));
 	}
 
 	/**
@@ -281,7 +317,7 @@ public class Main {
 	}
 
 	/**
-	 * Main menu 
+	 * Main menu
 	 * 
 	 * add sort deck
 	 * 
