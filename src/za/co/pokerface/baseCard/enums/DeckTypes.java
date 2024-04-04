@@ -1,5 +1,6 @@
 package za.co.pokerface.baseCard.enums;
 import za.co.pokerface.baseCard.DeckOfCards;
+import za.co.pokerface.standardDeck.FourHandDeck;
 import za.co.pokerface.standardDeck.StandardDeck;
 
 /**
@@ -8,7 +9,8 @@ import za.co.pokerface.standardDeck.StandardDeck;
  *
  */
 public enum DeckTypes {
-	STANDARD(new StandardDeck());
+	STANDARD(new StandardDeck()),
+	FOURHAND(new FourHandDeck());
 
 	private DeckOfCards deck;
  

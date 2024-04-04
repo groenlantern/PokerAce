@@ -8,8 +8,8 @@ import za.co.pokerface.baseCard.DeckOfCards;
 import za.co.pokerface.baseCard.ICardInfo;
 import za.co.pokerface.baseCard.ShuffleDelegate;
 import za.co.pokerface.baseCard.enums.DeckTypes;
-import za.co.pokerface.baseCard.enums.FaceCards;
-import za.co.pokerface.baseCard.enums.PipCards;
+import za.co.pokerface.baseCard.enums.StandardFaceCards;
+import za.co.pokerface.baseCard.enums.StandardPipCards;
 import za.co.pokerface.baseCard.enums.Suites;
 
 /**
@@ -31,12 +31,12 @@ public class StandardDeck extends DeckOfCards {
 		
 		for (Suites suiteObj : Suites.values()) { 
 			//Adds numbered cards A-10
-			for (Enum<? extends ICardInfo> cardObj: PipCards.values()) { 
+			for (Enum<? extends ICardInfo> cardObj: StandardPipCards.values()) { 
 				pipCardsTmp.add( new Card(suiteObj,cardObj));
 			}		
 		
 			//Add Face cards Jack, Queen, King	
-			for (Enum<? extends ICardInfo> cardObj: FaceCards.values()) { 
+			for (Enum<? extends ICardInfo> cardObj: StandardFaceCards.values()) { 
 				faceCardsTmp.add(new Card(suiteObj,cardObj));
 			}
 		

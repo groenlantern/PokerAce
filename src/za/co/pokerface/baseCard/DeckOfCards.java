@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import za.co.pokerface.baseCard.enums.DeckTypes;
 import za.co.pokerface.standardDeck.SortbyRank;
 import za.co.pokerface.standardDeck.SortbySuiteAndRank;
+import za.co.pokerface.standardDeck.exceptions.NoDeckFoundException;
+import za.co.pokerface.standardDeck.exceptions.NoHandFoundException;
 
 /**
  * Base for a deck of cards definition
@@ -102,7 +104,8 @@ public abstract class DeckOfCards {
 	 */
 	public static ArrayList<Card> drawCards(ArrayList<Card> deck, int handSize, ArrayList<Card> hand) {		
 		for (int x = 0; x<handSize; x++) {
-			hand.add( deck.remove(0) );
+			if (deck.size() > 0)
+				hand.add( deck.remove(0) );
 			
 		}
 		
@@ -117,17 +120,121 @@ public abstract class DeckOfCards {
 	 */
 	public static ArrayList<Card> returnCards(ArrayList<Card> deck, ArrayList<Card> hand) {
 		int handSize = hand.size();
+
+		if (isEmpty(deck, hand)) return deck;
+
+		return  returnCards( deck, hand,handSize );
+	}
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @return
+	 */
+	private static boolean isEmpty(ArrayList<Card> deck, ArrayList<Card> hand) {
+		if (deck == null || deck.isEmpty() || hand == null || hand.isEmpty()) {
+			return true;
+		}
 		
-		for (int x = 0; x< handSize; x++) { 
-			if ( !deck.contains( hand.get(0))) { 
-				deck.add( hand.remove(0) );
-			}
+		return false;
+	}
+	
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @param numberOfCards
+	 * @return
+	 */
+	public static ArrayList<Card> returnCards(ArrayList<Card> deck, ArrayList<Card> hand, int numberOfCards) {
+		 
+		if (isEmpty(deck, hand)) return deck;
+		
+		if (numberOfCards > hand.size()) numberOfCards = hand.size();
+		
+		System.out.println("Returning " + numberOfCards + " cards to deck...");
+		
+		for (int x = 0; x< numberOfCards; x++) {
+			if ( hand.size() < 1) break;
+			
+			addCardBackToDeck(deck, hand, 0);
 		}
 				
 		return deck;
 	}
-	
- 
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @param numberOfCards
+	 * @return
+	 */
+	public static ArrayList<Card> returnCard(ArrayList<Card> deck, ArrayList<Card> hand, Card cardObj) {
+		 
+		if (isEmpty(deck, hand)) return deck;
+
+		if (!hand.contains( cardObj)) { 
+			System.out.println("No card to return");
+			
+			return deck;
+		}
+		
+		System.out.println("Returning " + ((ICardInfo) cardObj.getCardRank()).getSymbol() +  cardObj.getCardSuite().symbol + " card to deck...");
+		
+		addCardBackToDeck(deck, hand, cardObj);
+				
+		return deck;
+	}
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @param indexNo
+	 * @return
+	 * @throws NoDeckFoundException 
+	 * @throws NoHandFoundException 
+	 */
+	public static Card getCardTemp(ArrayList<Card> deck, ArrayList<Card> hand, int indexNo) throws NoDeckFoundException, NoHandFoundException {
+		 
+		if (isEmpty(deck, hand)) throw new NoDeckFoundException("No Deck/Hand");
+		
+		if (indexNo >= hand.size()) throw new NoHandFoundException("Card not found in Hand") ;
+		
+		if (  !deck.contains( hand.get(indexNo))) return hand.get(indexNo) ;
+		
+		throw new NoHandFoundException("Card not found in Hand");
+	}
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @param indexNo
+	 */
+	private static void addCardBackToDeck(ArrayList<Card> deck, ArrayList<Card> hand, Card cardObj) {
+		if (  !deck.contains( cardObj ))  
+				deck.add( cardObj  );
+		
+		if (  hand.contains( cardObj ))
+			hand.remove(cardObj);
+	}
+
+	/**
+	 * 
+	 * @param deck
+	 * @param hand
+	 * @param indexNo
+	 */
+	private static void addCardBackToDeck(ArrayList<Card> deck, ArrayList<Card> hand, int indexNo) {
+		if (  !deck.contains( hand.get(indexNo))) { 
+			deck.add( hand.remove(indexNo) );
+		}
+	}
+
 	/**
 	 * 
 	 * @param deck

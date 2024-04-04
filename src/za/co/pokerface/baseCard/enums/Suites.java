@@ -54,6 +54,12 @@ public enum Suites implements ICardInfo {
 	public int getRank_secondary() {
 		return 0;
 	}
+
+	@Override
+	public CardImages cardImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

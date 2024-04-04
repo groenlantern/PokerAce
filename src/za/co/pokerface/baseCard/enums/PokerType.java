@@ -7,7 +7,8 @@ package za.co.pokerface.baseCard.enums;
  */
 public enum PokerType  {
 
-	STANDARDPOKER("Standard Poker", DeckTypes.STANDARD, 5);
+	STANDARDPOKER("Standard Poker", DeckTypes.STANDARD, 5),
+	FOURHANDDRAWPOKER("4 Hand Poker", DeckTypes.FOURHAND, 4);
 	
 	private String label;
 	private DeckTypes deckType;

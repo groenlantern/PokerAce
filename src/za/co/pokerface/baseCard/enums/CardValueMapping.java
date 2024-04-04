@@ -10,19 +10,20 @@ import za.co.pokerface.standardDeck.exceptions.NoPIPFoundException;
  */
 public enum CardValueMapping implements IMapperEnum {
 
-	ACE_MAP(PipCards.ACE, Figure.ACE),
-	TWO_MAP(PipCards.DUECE, Figure.TWO),
-	THREE_MAP(PipCards.TREY, Figure.THREE),
-	FOUR_MAP(PipCards.FOUR, Figure.FOUR),
-	FIVE_MAP(PipCards.FIVE, Figure.FIVE),
-	SIX_MAP(PipCards.SIX, Figure.SIX),
-	SEVEN_MAP(PipCards.SEVEN, Figure.SEVEN),
-	EIGHT_MAP(PipCards.EIGHT, Figure.EIGHT),
-	NINE_MAP(PipCards.NINE, Figure.NINE),
-	TEN_MAP(PipCards.TEN, Figure.TEN),
-	JACK_MAP(FaceCards.JACK, Figure.JACK),
-	QUEEN_MAP(FaceCards.QUEEN, Figure.QUEEN),
-	KING_MAP(FaceCards.KING, Figure.KING);
+	ACE_MAP(StandardPipCards.ACE, Figure.ACE),
+	TWO_MAP(StandardPipCards.DUECE, Figure.TWO),
+	THREE_MAP(StandardPipCards.TREY, Figure.THREE),
+	FOUR_MAP(StandardPipCards.FOUR, Figure.FOUR),
+	FIVE_MAP(StandardPipCards.FIVE, Figure.FIVE),
+	SIX_MAP(StandardPipCards.SIX, Figure.SIX),
+	SEVEN_MAP(StandardPipCards.SEVEN, Figure.SEVEN),
+	EIGHT_MAP(StandardPipCards.EIGHT, Figure.EIGHT),
+	NINE_MAP(StandardPipCards.NINE, Figure.NINE),
+	TEN_MAP(StandardPipCards.TEN, Figure.TEN),
+	JACK_MAP(StandardFaceCards.JACK, Figure.JACK),
+	QUEEN_MAP(StandardFaceCards.QUEEN, Figure.QUEEN),
+	KING_MAP(StandardFaceCards.KING, Figure.KING),
+	JOKER_MAP(ExtraCards.JOKER, null);
 	
 	private Enum<? extends ICardInfo> referenceCardInternal;
 	private Enum<?> referenceCardExternal;

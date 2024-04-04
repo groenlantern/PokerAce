@@ -2,6 +2,8 @@ package za.co.pokerface.baseCard;
 
 import java.awt.image.BufferedImage;
 
+import za.co.pokerface.baseCard.enums.CardImages;
+
 /**
  * 
  * @author Jean-Pierre Erasmus 
@@ -15,5 +17,6 @@ public interface ICardInfo {
 	public String getSymbol();
 	public int getRank();
 	public int getRank_secondary();
+	public CardImages cardImage();
 	
 }

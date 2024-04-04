@@ -6,17 +6,23 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import za.co.pokerface.baseCard.Card;
 import za.co.pokerface.baseCard.DeckOfCards;
 import za.co.pokerface.baseCard.ICardInfo;
 import za.co.pokerface.baseCard.IComboHand;
+import za.co.pokerface.baseCard.enums.CardImages;
 import za.co.pokerface.baseCard.enums.DeckTypes;
 import za.co.pokerface.baseCard.enums.EvaluatorLibrary;
 import za.co.pokerface.baseCard.enums.PokerHandMapping;
 import za.co.pokerface.baseCard.enums.PokerType;
 import za.co.pokerface.standardDeck.exceptions.NoDeckFoundException;
+import za.co.pokerface.standardDeck.exceptions.NoEvaluatorFoundException;
 import za.co.pokerface.standardDeck.exceptions.NoHandFoundException;
+import za.co.pokerface.standardDeck.util.CardPrinter;
 import za.co.pokerface.standardDeck.util.DeckFactory;
 import za.co.pokerface.standardDeck.util.ThirdPartyConvertor;
 
@@ -77,7 +83,7 @@ public class Main {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, Exception {
 
-		// create deck of cards
+ 		// create deck of cards
 		selectedDeck = gameType.getDeckType();
 		newDeck = Optional.of(DeckFactory.getNewDeck(selectedDeck));
 		hand = Optional.of(new ArrayList<>());
@@ -108,38 +114,55 @@ public class Main {
 	 */
 	private static void processUserInput(String userChat) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, Exception {
-		if (userChat != null && (userChat.toLowerCase().equals("s".toLowerCase())
-				|| userChat.toLowerCase().contains("shuffle".toLowerCase()))) {
+		if (userChat == null) return;
+		
+		//Shuffle deck
+		if ( userChat.toLowerCase().equals("s".toLowerCase())
+				|| userChat.toLowerCase().contains("shuffle".toLowerCase())) {
 			shuffle();
 		}
 
-		if (userChat != null && (userChat.toLowerCase().contains("sort by rank".toLowerCase()))) {
+		//Sort Deck
+		if (userChat.toLowerCase().contains("sort by rank".toLowerCase())) {
 			sortByRank();
-		} else if (userChat != null && (userChat.toLowerCase().equals("sr".toLowerCase())
-				|| userChat.toLowerCase().contains("sort".toLowerCase()))) {
+		} else if (userChat.toLowerCase().equals("sr".toLowerCase())
+				|| userChat.toLowerCase().contains("sort".toLowerCase())) {
 			sort();
 		}
 
-		if (userChat != null && (userChat.toLowerCase().equals("d".toLowerCase())
-				|| userChat.toLowerCase().contains("draw".toLowerCase()))) {
+		//Draw cards 
+		if (userChat.toLowerCase().equals("d".toLowerCase())
+				|| userChat.toLowerCase().contains("draw".toLowerCase())) {
 			drawCards();
 
 		}
 
-		if (userChat != null && (userChat.toLowerCase().equals("e".toLowerCase())
-				|| userChat.toLowerCase().contains("evaluate".toLowerCase()))) {
+		//Show hand 
+		if (userChat.toLowerCase().equals("sh".toLowerCase())
+				|| userChat.toLowerCase().contains("show".toLowerCase())) {
+			showCards();
+
+		}
+
+		//Evaluate deck
+		if (userChat.toLowerCase().equals("e".toLowerCase())
+				|| userChat.toLowerCase().contains("evaluate".toLowerCase())) {
 			evalHand();
 		}
 
-		if (userChat != null && (userChat.toLowerCase().equals("r".toLowerCase())
-				|| userChat.toLowerCase().contains("return".toLowerCase()))) {
-			returnCards();
+		//Return cards
+		if (userChat.toLowerCase().equals("r".toLowerCase())
+				|| userChat.toLowerCase().startsWith("r ".toLowerCase()) 
+				|| userChat.toLowerCase().contains("return".toLowerCase())) {
+			
+			replaceCards(userChat);
 
 		}
 
-		if (userChat != null && (userChat.toLowerCase().equals("q".toLowerCase())
+		//Quit app
+		if (userChat.toLowerCase().equals("q".toLowerCase())
 				|| userChat.toLowerCase().contains("quit".toLowerCase())
-				|| userChat.toLowerCase().contains("exit".toLowerCase()))) {
+				|| userChat.toLowerCase().contains("exit".toLowerCase())) {
 			System.out.println("Bye, see ya later!");
 			System.out.println("");
 			System.exit(0);
@@ -148,25 +171,140 @@ public class Main {
 	}
 
 	/**
-	 * Return cards to deck
 	 * 
+	 * @param userChat
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 * @throws Exception
 	 */
-	private static void returnCards() throws InstantiationException, IllegalAccessException, InvocationTargetException,
-			NoSuchMethodException, Exception {
-		System.out.println("Returning cards to deck...");
+	private static void replaceCards(String userChat) throws InstantiationException, IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException, Exception {		
+		validateDeckHand();
+		
+		ArrayList<Integer> cardsToReturn = getSpecifiedCnt(userChat);
 
-		if (newDeck.isEmpty())
+		if (cardsToReturn != null && cardsToReturn.size() > 0)  
+			returnCardsIndiv( cardsToReturn );
+		else 
+			DeckOfCards.returnCards(newDeck.get(), hand.get(), getCnt(userChat));
+		
+		setup3dPartyHand();
+		
+		showCards();
+	}
+
+	/**
+	 * 
+	 * @param userChat
+	 * @return
+	 */
+	private static int getCnt(String userChat) {
+		int returnCnt = (hand.isPresent()?hand.get().size():0);
+				
+		 Pattern p = Pattern.compile("(^|\\s)([0-9]+)($|\\s)");
+		 Matcher matcher = p.matcher(userChat);
+				  		 				
+		try { 
+			returnCnt = Integer.valueOf( (matcher.find())?matcher.group(0).trim().strip():"X");
+		} catch (Exception e) {
+
+			returnCnt = (hand.isPresent()?hand.get().size():0);
+		}
+		
+		return returnCnt;
+	}
+
+	/**
+	 * 
+	 * @param userChat
+	 * @return
+	 */
+	private static ArrayList<Integer> getSpecifiedCnt(String userChat) {
+		Pattern pCards = Pattern.compile("(((?i)C[0-9][0-9]?)+)\\s?");
+		Pattern pNumber = Pattern.compile("(((?i)[0-9][0-9]?)+)\\s?");
+
+		Matcher matcher = pCards.matcher(userChat);
+		
+		ArrayList<Integer> cardsToReturn = new ArrayList<>();
+		
+		try { 
+			while ( matcher.find() ) { 
+				Matcher matcherNumber = pNumber.matcher( matcher.group(0) );
+
+				if ( matcherNumber.find() )
+					cardsToReturn.add( Integer.valueOf( matcherNumber.group(0).trim().strip()) );
+			}
+		} catch (Exception e) {}
+		
+		return cardsToReturn;
+	}
+
+	  
+/**
+ * 
+ * @param cardsToReturn
+ * @throws InstantiationException
+ * @throws IllegalAccessException
+ * @throws InvocationTargetException
+ * @throws NoSuchMethodException
+ * @throws Exception
+ */
+	private static void returnCardsIndiv(ArrayList<Integer> cardsToReturnIndx) throws InstantiationException, IllegalAccessException, InvocationTargetException,
+	NoSuchMethodException, Exception {
+ 
+		for (Card cardObj : getCardsToRemove( cardsToReturnIndx )) { 
+			DeckOfCards.returnCard(newDeck.get(), hand.get(), cardObj );
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @param cardsToReturnIndx
+	 * @param cardsToReturn
+	 * @throws NoHandFoundException 
+	 * @throws NoDeckFoundException 
+	 */
+	private static ArrayList<Card> getCardsToRemove(ArrayList<Integer> cardsToReturnIndx) throws NoDeckFoundException, NoHandFoundException {
+		ArrayList<Card> cardsToReturn = new ArrayList<>();
+		
+		for (Integer cardNo : cardsToReturnIndx) {
+			if ( cardNo <= hand.get().size())
+				cardsToReturn.add( DeckOfCards.getCardTemp(newDeck.get(), hand.get(), (cardNo - 1) ) );
+		 
+		}
+		
+		return cardsToReturn;
+	}
+
+	/**
+	 * 
+	 */
+	private static void validateDeckHand() throws NoDeckFoundException, NoHandFoundException {
+		if (newDeck == null || newDeck.isEmpty())
 			throw new NoDeckFoundException("Exception: Empty Deck");
-		if (hand.isEmpty())
+		if (hand == null || hand.isEmpty())
 			throw new NoHandFoundException("Exception: Empty Hand");
+	}
 
-		DeckOfCards.returnCards(newDeck.get(), hand.get());
-		rdPrtyHand = null;
+	/**
+	 * 
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws Exception
+	 * @throws NoEvaluatorFoundException
+	 */
+	private static void setup3dPartyHand() throws InstantiationException, IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException, Exception, NoEvaluatorFoundException {
+		if ( hand == null || hand.isEmpty() || hand.get().size() < 1) { 
+			rdPrtyHand = null;
+		} else { 
+			rdPrtyHand = ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).loadHand(hand.get());
+		}
 	}
 
 	/**
@@ -177,7 +315,7 @@ public class Main {
 	private static void evalHand() throws Exception {
 		System.out
 				.println("Evaluating hand by value for " + gameType.getDeckType().getDeckDefinition().getDescription());
-
+ 		
 		if (hand == null || rdPrtyHand == null) {
 			System.out.println("Your hand is Empty");
 		} else {
@@ -225,17 +363,35 @@ public class Main {
 		if (hand.isEmpty())
 			throw new NoHandFoundException("Exception: Empty Hand");
 
-		rdPrtyHand = ThirdPartyConvertor.ThirdPartyConvertorFactory(handEvaluator).loadHand(hand.get());
+		setup3dPartyHand();
 
-		// Print the current hand of cards
-		System.out.print("Your hand: ");
+		showCards();
+	}
 
-		for (Card cardObj : hand.get()) {
-			System.out
-					.print(" " + ((ICardInfo) cardObj.getCardRank()).getSymbol() + cardObj.getCardSuite().getSymbol());
-		}
+	/**
+	 * Show hand
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws Exception
+	 */
+	private static void showCards() throws InstantiationException, IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException, Exception {
+	
+		if (newDeck.isEmpty())
+			throw new NoDeckFoundException("Exception: Empty Deck");
+		if (hand.isEmpty())
+			throw new NoHandFoundException("Exception: Empty Hand");
 
+		CardPrinter printer =new CardPrinter(hand);
+		
+		printer.printFullHand();
+		
 		System.out.println("");
+		
+		printer.printHandFan();
+		
 		System.out.println("");
 	}
 

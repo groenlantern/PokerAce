@@ -73,5 +73,11 @@ public enum PokerHand implements IComboHand {
 		return 0;
 	}
 
+	@Override
+	public CardImages cardImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

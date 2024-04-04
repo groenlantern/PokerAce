@@ -8,17 +8,25 @@ import za.co.pokerface.baseCard.ICardInfo;
  * @author Jean-Pierre Erasmus
  *
  */
-public enum PipCards implements ICardInfo {
-	ACE("A", 1, 14), 
-	DUECE("2", 2, 2), 
-	TREY("3", 3, 3),
-	FOUR("4", 4, 4),
-	FIVE("5", 5, 5),
-	SIX("6", 6, 6),
-	SEVEN("7", 7, 7),
-	EIGHT("8", 8, 8),
-	NINE("9", 9, 9),
-	TEN("10", 10, 10);
+public enum StandardFaceCards implements ICardInfo {
+	JACK("J", 11, 11){ 
+		@Override
+		public CardImages cardImage() {
+			return CardImages.JACK_CARD1;
+		}
+	}, 
+	QUEEN("Q", 12, 12){ 
+		@Override
+		public CardImages cardImage() {
+			return CardImages.QUEEN_CARD1;
+		}
+	}, 
+	KING("K", 13, 13){ 
+		@Override
+		public CardImages cardImage() {
+			return CardImages.KING_CARD2;
+		}
+	};
 
 	public String symbol;
 	public int rank;
@@ -29,18 +37,10 @@ public enum PipCards implements ICardInfo {
 	 * @param symbol
 	 * @param rank 
 	 */
-	PipCards(String symbol, int rank, int rank_secondary) { 
+	StandardFaceCards(String symbol, int rank, int rank_secondary) { 
 		this.symbol = symbol;
 		this.rank = rank;
 		this.rank_secondary = rank_secondary;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int getRank_secondary() {
-		return rank_secondary;
 	}
 
 	@Override
@@ -63,6 +63,16 @@ public enum PipCards implements ICardInfo {
 	@Override
 	public int getRank() {
 		return this.rank;
+	}
+
+	@Override
+	public int getRank_secondary() {
+		return rank_secondary;
+	}
+
+	@Override
+	public CardImages cardImage() {
+		return CardImages.FACE_CARD;
 	}
 	
 	
