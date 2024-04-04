@@ -125,6 +125,8 @@ public class Main {
 		//Sort Deck
 		if (userChat.toLowerCase().contains("sort by rank".toLowerCase())) {
 			sortByRank();
+		} else if (userChat.toLowerCase().contains("sort hand".toLowerCase())) {
+			sortHand();
 		} else if (userChat.toLowerCase().equals("sr".toLowerCase())
 				|| userChat.toLowerCase().contains("sort".toLowerCase())) {
 			sort();
@@ -427,6 +429,29 @@ public class Main {
 		newDeck = Optional.of(DeckOfCards.sort(newDeck.get()));
 	}
 
+
+	/**
+	 * 
+	 * @throws Exception 
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws NoHandFoundException
+	 */
+	private static void sortHand() throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
+		System.out.println("Sort Hand... ");
+
+		if (hand.isEmpty()) { 
+			System.out.println("Empty Hand");
+			
+			return;
+		}
+		
+		hand = Optional.of(DeckOfCards.sort(hand.get()));
+		
+		showCards();
+	}
 	/**
 	 * Deck sort the deck by rank only
 	 * 
