@@ -149,6 +149,19 @@ public enum CardImages  {
 			   "╰─────────╯"}, "N" )
 ,         
 	
+
+BACK_CARD("Card BACK", "@", new String[]
+		  {"╭─────────╮" ,		   
+		   "│v♠v♠v♠v♠v│" ,		   
+		   "│v♣_,-._♣v│" ,
+		   "│%/ \\_/ \\%│" ,
+		   "│♦>-(_)-<♦│" ,
+		   "│%\\_/ \\_/%│" ,
+		   "│v♣%`-'%♣v│" ,		   
+		   "│♥v♥v♥v♥v♥│" ,        
+		   "╰─────────╯"}, " " )
+,         
+ 
 	LABEL_CARD("Label/Joker Card", "JOKER", new String[]
 			  {"╭─────────╮" ,
 			   "│JOKER    │" ,

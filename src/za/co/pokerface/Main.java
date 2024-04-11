@@ -83,6 +83,12 @@ public class Main {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, Exception {
 
+		printClearScrn();
+		
+		for (String row : CardImages.BACK_CARD.getAsciiTemplate()) { 
+			System.out.println(row);
+		}
+		
  		// create deck of cards
 		selectedDeck = gameType.getDeckType();
 		newDeck = Optional.of(DeckFactory.getNewDeck(selectedDeck));
@@ -95,9 +101,11 @@ public class Main {
 
 		// Process user input
 		while (true) {
+			
 			String userChat = readInput();
 
 			processUserInput(userChat);
+
 
 		}
 
@@ -114,6 +122,8 @@ public class Main {
 	 */
 	private static void processUserInput(String userChat) throws InstantiationException, IllegalAccessException,
 			InvocationTargetException, NoSuchMethodException, Exception {
+		printClearScrn();
+						
 		if (userChat == null) return;
 		
 		//Shuffle deck
@@ -125,6 +135,9 @@ public class Main {
 		//Sort Deck
 		if (userChat.toLowerCase().contains("sort by rank".toLowerCase())) {
 			sortByRank();
+		} else if (userChat.toLowerCase().contains("sort hand".toLowerCase()) &&
+				userChat.toLowerCase().contains("rank".toLowerCase()) ) {
+			sortHandRank();
 		} else if (userChat.toLowerCase().contains("sort hand".toLowerCase())) {
 			sortHand();
 		} else if (userChat.toLowerCase().equals("sr".toLowerCase())
@@ -170,6 +183,11 @@ public class Main {
 			System.exit(0);
 		}
 
+	}
+
+	private static void printClearScrn() {
+		System.out.println("\r\n" + "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "\r\n"+ "");
+		System.out.flush();
 	}
 
 	/**
@@ -442,15 +460,43 @@ public class Main {
 	private static void sortHand() throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
 		System.out.println("Sort Hand... ");
 
-		if (hand.isEmpty()) { 
-			System.out.println("Empty Hand");
-			
-			return;
-		}
+		if (!validateHand()) return;
 		
 		hand = Optional.of(DeckOfCards.sort(hand.get()));
 		
 		showCards();
+	}
+	
+	/**
+	 * 
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws Exception
+	 */
+	private static void sortHandRank() throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, Exception {
+		System.out.println("Sort Hand by Rank... ");
+
+		if (!validateHand()) return;
+		
+		hand = Optional.of(DeckOfCards.sortRankOnly(hand.get()));
+		
+		showCards();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private static boolean validateHand() {
+		if (hand.isEmpty()) { 
+			System.out.println("Empty Hand");
+			
+			return true;
+		}
+		
+		return false;
 	}
 	/**
 	 * Deck sort the deck by rank only
