@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="PokerAce">
+
+ <project basedir="." default="build-project" name="PokerAce">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../eclipse/jee-2022-06/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="17"/>
-    <property name="source" value="17"/>
+    <property name="target" value="11"/>
+    <property name="source" value="11"/>
     <path id="EAR Libraries.libraryclasspath"/>
+
     <path id="JUnit 4.libraryclasspath">
         <pathelement location="../../.p2/pool/plugins/org.junit_4.13.2.v20211018-1956.jar"/>
         <pathelement location="../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
     </path>
+
     <path id="PokerAce.classpath">
+        <pathelement location="."/>
+        <pathelement location="*.*"/>
         <pathelement location="build/classes"/>
+        <pathelement location="build/classes/*.*"/>
         <pathelement location="resources/pokerhand-master.jar"/>
         <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
         <pathelement location="resources/checker-compat-qual-2.0.0.jar"/>
@@ -28,13 +29,15 @@
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
+
     <path id="run.Main.classpath">
-        <pathelement location="resources/pokerhand-master.jar"/>
+        <pathelement location="./resources/pokerhand-master.jar"/>
         <path refid="PokerAce.classpath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
+        <pathelement location="./resources/guava-24.1-jre.jar"/>
     </path>
+
     <path id="run.MainTest.classpath">
         <pathelement location="resources/pokerhand-master.jar"/>
         <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
@@ -48,20 +51,7 @@
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
-    <path id="run.MainTest (1).classpath">
-        <pathelement location="resources/pokerhand-master.jar"/>
-        <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
-        <pathelement location="resources/checker-compat-qual-2.0.0.jar"/>
-        <pathelement location="resources/error_prone_annotations-2.1.3.jar"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
-        <pathelement location="resources/hamcrest-core-1.3.jar"/>
-        <pathelement location="resources/j2objc-annotations-1.1.jar"/>
-        <pathelement location="resources/jsr305-1.3.9.jar"/>
-        <path refid="PokerAce.classpath"/>
-        <path refid="EAR Libraries.libraryclasspath"/>
-        <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="resources/junit-4.13.2.jar"/>
-    </path>
+
     <target name="init">
         <mkdir dir="build/classes"/>
         <copy includeemptydirs="false" todir="build/classes">
@@ -71,12 +61,13 @@
             </fileset>
         </copy>
     </target>
+
     <target name="clean">
-        <delete dir="build/classes"/>
+        <delete dir="./build/classes"/>
     </target>
+
     <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects"/>
+
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
@@ -84,25 +75,14 @@
             <classpath refid="PokerAce.classpath"/>
         </javac>
     </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
+
+
     <target name="Main">
         <java classname="za.co.pokerface.Main" failonerror="true" fork="yes">
             <classpath refid="run.Main.classpath"/>
         </java>
     </target>
+
     <target name="MainTest">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
@@ -112,15 +92,8 @@
             <classpath refid="run.MainTest.classpath"/>
         </junit>
     </target>
-    <target name="MainTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="za.co.pokerface.test.MainTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="run.MainTest (1).classpath"/>
-        </junit>
-    </target>
+
+
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">
             <fileset dir="${junit.output.dir}">
@@ -129,4 +102,5 @@
             <report format="frames" todir="${junit.output.dir}"/>
         </junitreport>
     </target>
+
 </project>
