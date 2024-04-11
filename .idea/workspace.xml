@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca951a4f-b99f-4b6d-9ea1-69ec671a8673" name="Changes" comment="intellij" />
+    <list default="true" id="ca951a4f-b99f-4b6d-9ea1-69ec671a8673" name="Changes" comment="intellij">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/DeckOfCards.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/DeckOfCards.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/ICardInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/ICardInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/CardValueMapping.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/CardValueMapping.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/DeckTypes.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/DeckTypes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/FaceCards.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/PipCards.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/PokerHand.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/PokerHand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/PokerType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/PokerType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/Suites.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/baseCard/enums/Suites.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/za/co/pokerface/standardDeck/StandardDeck.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/za/co/pokerface/standardDeck/StandardDeck.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/za/co/pokerface/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/za/co/pokerface/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,23 +43,23 @@
     <option name="showVisibilityIcons" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path": "C:\\Users\\f5156165\\IdeaProjects\\PokerAce\\resources",
-    "Downloaded.Files.Path.Enabled": "true",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "C:/Users/f5156165/IdeaProjects/PokerAce/build.xml",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path&quot;: &quot;C:\\Users\\f5156165\\IdeaProjects\\PokerAce\\resources&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/f5156165/IdeaProjects/PokerAce/build.xml&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="run" type="AntRunConfiguration">
       <antsettings antfile="file://$PROJECT_DIR$/build.xml" target="Main" />

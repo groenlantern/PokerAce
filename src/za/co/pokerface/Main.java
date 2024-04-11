@@ -552,7 +552,7 @@ public class Main {
 	private static void printMenu() {
 		System.out.println("What would you like to do today ?  ");
 		System.out.println(
-				"[S] - Shuffle Deck; [D] - Draw Cards; [E} - Evaluate Hand; [R] - Return Cards; [SR] - Sort Deck; [Q] - Exit/Quit; ");
+				"[S] - Shuffle Deck; [D] - Draw Cards; [E} - Evaluate Hand; [R] - Return Cards; [SR] - Sort Deck; [SH] - Show Hand; [Q] - Exit/Quit; ");
 	}
 
 	/**
