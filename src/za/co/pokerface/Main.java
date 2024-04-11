@@ -384,7 +384,7 @@ public class Main {
 		if (hand.isEmpty())
 			throw new NoHandFoundException("Exception: Empty Hand");
 
-		CardPrinter printer =new CardPrinter(hand);
+		CardPrinter printer = new CardPrinter(hand);
 		
 		printer.printFullHand();
 		
