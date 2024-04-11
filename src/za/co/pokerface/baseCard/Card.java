@@ -1,10 +1,9 @@
 package za.co.pokerface.baseCard;
 
 import za.co.pokerface.baseCard.enums.Suites;
-import za.co.pokerface.standardDeck.exceptions.InvalidRankException;
 
 import static org.junit.Assert.assertTrue;
- 
+
 public class Card {
 	
 	Suites cardSuite; 
