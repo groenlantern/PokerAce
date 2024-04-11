@@ -2,7 +2,6 @@
 
  <project basedir="." default="build" name="PokerAce">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../eclipse/jee-2022-06/eclipse/"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="17"/>
@@ -15,50 +14,51 @@
     </path>
 
     <path id="PokerAce.classpath">
-        <pathelement location="build/classes"/>
-        <pathelement location="resources/pokerhand-master.jar"/>
-        <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
-        <pathelement location="resources/checker-compat-qual-2.0.0.jar"/>
-        <pathelement location="resources/error_prone_annotations-2.1.3.jar"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
-        <pathelement location="resources/hamcrest-core-1.3.jar"/>
-        <pathelement location="resources/j2objc-annotations-1.1.jar"/>
-        <pathelement location="resources/jsr305-1.3.9.jar"/>
+        <pathelement location="."/>
+        <pathelement location="./build/classes"/>
+        <pathelement location="./resources/pokerhand-master.jar"/>
+        <pathelement location="./resources/animal-sniffer-annotations-1.14.jar"/>
+        <pathelement location="./resources/checker-compat-qual-2.0.0.jar"/>
+        <pathelement location="./resources/error_prone_annotations-2.1.3.jar"/>
+        <pathelement location="./resources/guava-24.1-jre.jar"/>
+        <pathelement location="./resources/hamcrest-core-1.3.jar"/>
+        <pathelement location="./resources/j2objc-annotations-1.1.jar"/>
+        <pathelement location="./resources/jsr305-1.3.9.jar"/>
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
 
     <path id="run.Main.classpath">
-        <pathelement location="resources/pokerhand-master.jar"/>
+        <pathelement location="./resources/pokerhand-master.jar"/>
         <path refid="PokerAce.classpath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
+        <pathelement location="./resources/guava-24.1-jre.jar"/>
     </path>
 
     <path id="run.MainTest.classpath">
-        <pathelement location="resources/pokerhand-master.jar"/>
-        <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
-        <pathelement location="resources/checker-compat-qual-2.0.0.jar"/>
-        <pathelement location="resources/error_prone_annotations-2.1.3.jar"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
-        <pathelement location="resources/hamcrest-core-1.3.jar"/>
-        <pathelement location="resources/j2objc-annotations-1.1.jar"/>
-        <pathelement location="resources/jsr305-1.3.9.jar"/>
+        <pathelement location="./resources/pokerhand-master.jar"/>
+        <pathelement location="./resources/animal-sniffer-annotations-1.14.jar"/>
+        <pathelement location="./resources/checker-compat-qual-2.0.0.jar"/>
+        <pathelement location="./resources/error_prone_annotations-2.1.3.jar"/>
+        <pathelement location="./resources/guava-24.1-jre.jar"/>
+        <pathelement location="./resources/hamcrest-core-1.3.jar"/>
+        <pathelement location="./resources/j2objc-annotations-1.1.jar"/>
+        <pathelement location="./resources/jsr305-1.3.9.jar"/>
         <path refid="PokerAce.classpath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
     </path>
 
     <path id="run.MainTest (1).classpath">
-        <pathelement location="resources/pokerhand-master.jar"/>
-        <pathelement location="resources/animal-sniffer-annotations-1.14.jar"/>
-        <pathelement location="resources/checker-compat-qual-2.0.0.jar"/>
-        <pathelement location="resources/error_prone_annotations-2.1.3.jar"/>
-        <pathelement location="resources/guava-24.1-jre.jar"/>
-        <pathelement location="resources/hamcrest-core-1.3.jar"/>
-        <pathelement location="resources/j2objc-annotations-1.1.jar"/>
-        <pathelement location="resources/jsr305-1.3.9.jar"/>
+        <pathelement location="./resources/pokerhand-master.jar"/>
+        <pathelement location="./resources/animal-sniffer-annotations-1.14.jar"/>
+        <pathelement location="./resources/checker-compat-qual-2.0.0.jar"/>
+        <pathelement location="./resources/error_prone_annotations-2.1.3.jar"/>
+        <pathelement location="./resources/guava-24.1-jre.jar"/>
+        <pathelement location="./resources/hamcrest-core-1.3.jar"/>
+        <pathelement location="./resources/j2objc-annotations-1.1.jar"/>
+        <pathelement location="./resources/jsr305-1.3.9.jar"/>
         <path refid="PokerAce.classpath"/>
         <path refid="EAR Libraries.libraryclasspath"/>
         <path refid="JUnit 4.libraryclasspath"/>
@@ -76,7 +76,7 @@
     </target>
 
     <target name="clean">
-        <delete dir="build/classes"/>
+        <delete dir="./build/classes"/>
     </target>
 
     <target depends="clean" name="cleanall"/>
